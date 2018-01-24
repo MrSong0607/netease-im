@@ -1,6 +1,8 @@
 package netease
 
 import (
+	"encoding/json"
+	"errors"
 	"strconv"
 
 	"github.com/json-iterator/go"
@@ -11,9 +13,8 @@ const (
 	createImUserPoint = neteaseBaseURL + "/user/create.action"
 )
 
-//CreateImUser .
+//CreateImUser 创建网易云通信ID
 /**
- * 创建网易云通信ID
  * @param accid 网易云通信ID，最大长度32字符，必须保证一个APP内唯一（只允许字母、数字、半角下划线_、@、半角点以及半角-组成，不区分大小写，会统一小写处理，请注意以此接口返回结果中的accid为准）。
  * @param name 网易云通信ID昵称，最大长度64字符，用来PUSH推送时显示的昵称
  * @param props json属性，第三方可选填，最大长度1024字符
@@ -60,7 +61,7 @@ func (c *ImClient) CreateImUser(accid, name, props, icon, token, sign, email, bi
 		param["gender"] = strconv.Itoa(gender)
 	}
 
-	client := c.genRestClient()
+	client := c.client.R()
 	client.SetFormData(param)
 
 	resp, err := client.Post(createImUserPoint)
@@ -68,23 +69,28 @@ func (c *ImClient) CreateImUser(accid, name, props, icon, token, sign, email, bi
 		return nil, err
 	}
 
-	r := &APIResult{}
-	err = jsoniter.Unmarshal(resp.Body(), r)
+	var jsonRes map[string]*json.RawMessage
+	err = jsoniter.Unmarshal(resp.Body(), &jsonRes)
 	if err != nil {
 		return nil, err
 	}
 
+	var code int
+	err = json.Unmarshal(*jsonRes["code"], &code)
+	if err != nil {
+		return nil, err
+	}
+
+	if code != 200 {
+		var msg string
+		json.Unmarshal(*jsonRes["desc"], &msg)
+		return nil, errors.New(msg)
+	}
+
 	tk := &TokenInfo{}
-	if val, ok := r.Info["token"]; ok {
-		tk.Token = val.(string)
-	}
-
-	if val, ok := r.Info["accid"]; ok {
-		tk.Accid = val.(string)
-	}
-
-	if val, ok := r.Info["name"]; ok {
-		tk.Name = val.(string)
+	err = jsoniter.Unmarshal(*jsonRes["info"], tk)
+	if err != nil {
+		return nil, err
 	}
 
 	return tk, nil
