@@ -27,38 +27,38 @@ const (
  * @param gender 用户性别，0表示未知，1表示男，2女表示女，其它会报参数错误
  * @param ex 用户名片扩展字段，最大长度1024字符，用户可自行扩展，建议封装成JSON字符串
  */
-func (c *ImClient) CreateImUser(accid, name, props, icon, token, sign, email, birth, mobile, ex string, gender int) (*TokenInfo, error) {
-	param := map[string]string{"accid": accid}
+func (c *ImClient) CreateImUser(u *ImUser) (*TokenInfo, error) {
+	param := map[string]string{"accid": u.ID}
 
-	if len(name) > 0 {
-		param["name"] = name
+	if len(u.Name) > 0 {
+		param["name"] = u.Name
 	}
-	if len(props) > 0 {
-		param["props"] = props
+	if len(u.Propertys) > 0 {
+		param["props"] = u.Propertys
 	}
-	if len(icon) > 0 {
-		param["icon"] = icon
+	if len(u.IconURL) > 0 {
+		param["icon"] = u.IconURL
 	}
-	if len(token) > 0 {
-		param["token"] = token
+	if len(u.Token) > 0 {
+		param["token"] = u.Token
 	}
-	if len(sign) > 0 {
-		param["sign"] = sign
+	if len(u.Sign) > 0 {
+		param["sign"] = u.Sign
 	}
-	if len(email) > 0 {
-		param["email"] = email
+	if len(u.Email) > 0 {
+		param["email"] = u.Email
 	}
-	if len(birth) > 0 {
-		param["birth"] = birth
+	if len(u.Birthday) > 0 {
+		param["birth"] = u.Birthday
 	}
-	if len(mobile) > 0 {
-		param["mobile"] = mobile
+	if len(u.Mobile) > 0 {
+		param["mobile"] = u.Mobile
 	}
-	if len(ex) > 0 {
-		param["ex"] = ex
+	if len(u.Extension) > 0 {
+		param["ex"] = u.Extension
 	}
-	if gender == 1 || gender == 2 {
-		param["gender"] = strconv.Itoa(gender)
+	if u.Gender == 1 || u.Gender == 2 {
+		param["gender"] = strconv.Itoa(u.Gender)
 	}
 
 	client := c.client.R()
