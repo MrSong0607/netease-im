@@ -1,7 +1,6 @@
 package netease
 
 import (
-	"net/url"
 	"strconv"
 	"time"
 
@@ -24,12 +23,7 @@ type ImClient struct {
 func CreateImClient(appkey, appSecret, httpProxy string) *ImClient {
 	c := &ImClient{AppKey: appkey, AppSecret: appSecret, Nonce: RandStringBytesMaskImprSrc(64)}
 	c.client = resty.New()
-	if len(httpProxy) > 0 {
-		_, err := url.ParseRequestURI(httpProxy)
-		if err == nil {
-			c.client.SetProxy(httpProxy)
-		}
-	}
+	c.client.SetProxy(httpProxy)
 
 	c.client.SetHeader("Accept", "application/json;charset=utf-8")
 	c.client.SetHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8;")
