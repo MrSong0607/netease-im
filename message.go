@@ -9,8 +9,9 @@ import (
 )
 
 const (
-	sendMsgPoint      = neteaseBaseURL + "/msg/sendMsg.action"
-	sendBatchMsgPoint = neteaseBaseURL + "/msg/sendBatchMsg.action"
+	sendMsgPoint            = neteaseBaseURL + "/msg/sendMsg.action"
+	sendBatchMsgPoint       = neteaseBaseURL + "/msg/sendBatchMsg.action"
+	sendBatchAttachMsgPoint = neteaseBaseURL + "/msg/sendBatchAttachMsg.action"
 )
 
 //SendTextMessage 发送文本消息,消息内容最长5000
@@ -149,6 +150,68 @@ func (c *ImClient) SendBatchMessage(fromID, body string, toIDs []string, msgType
 	client.SetFormData(param)
 
 	resp, err := client.Post(sendBatchMsgPoint)
+
+	var jsonRes map[string]*json.RawMessage
+	err = jsoniter.Unmarshal(resp.Body(), &jsonRes)
+	if err != nil {
+		return err
+	}
+
+	var code int
+	err = json.Unmarshal(*jsonRes["code"], &code)
+	if err != nil {
+		return err
+	}
+
+	if code != 200 {
+		return errors.New(string(resp.Body()))
+	}
+
+	return nil
+}
+
+//SendBatchAttachMsg 批量发送点对点自定义系统通知
+/**
+ * @param fromID 发送者accid，用户帐号，最大32字符，必须保证一个APP内唯一
+ * @param toIDs ["aaa","bbb"]（JSONArray对应的accid，如果解析出错，会报414错误），限500人
+ * @param attach 自定义通知内容，第三方组装的字符串，建议是JSON串，最大长度4096字符
+ */
+func (c *ImClient) SendBatchAttachMsg(fromID, attach string, toIDs []string, opt *ImSendAttachMessageOption) error {
+	param := map[string]string{"fromAccid": fromID}
+
+	to, err := jsonTool.MarshalToString(toIDs)
+	if err != nil {
+		return err
+	}
+
+	param["toAccids"] = to
+	param["attach"] = to
+	if opt != nil {
+		if len(opt.Pushcontent) > 0 {
+			param["pushcontent"] = opt.Pushcontent
+		}
+
+		if len(opt.Payload) > 0 {
+			param["payload"] = opt.Payload
+		}
+
+		if len(opt.Sound) > 0 {
+			param["sound"] = opt.Payload
+		}
+
+		if opt.Save == 1 || opt.Save == 2 {
+			param["save"] = strconv.Itoa(opt.Save)
+		}
+
+		if opt.Option != nil {
+			param["option"], _ = jsonTool.MarshalToString(opt.Option)
+		}
+	}
+
+	client := c.client.R()
+	client.SetFormData(param)
+
+	resp, err := client.Post(sendBatchAttachMsgPoint)
 
 	var jsonRes map[string]*json.RawMessage
 	err = jsoniter.Unmarshal(resp.Body(), &jsonRes)

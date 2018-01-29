@@ -36,6 +36,15 @@ type ImSendMessageOption struct {
 	Bid              string          //可选，反垃圾业务ID，实现“单条消息配置对应反垃圾”，若不填则使用原来的反垃圾配置
 }
 
+//ImSendAttachMessageOption .
+type ImSendAttachMessageOption struct {
+	Pushcontent string         //iOS推送内容，第三方自己组装的推送内容,不超过150字符
+	Payload     string         //ios 推送对应的payload,必须是JSON,不能超过2k字符
+	Sound       string         //如果有指定推送，此属性指定为客户端本地的声音文件名，长度不要超过30个字符，如果不指定，会使用默认声音
+	Save        int            //1表示只发在线，2表示会存离线，其他会报414错误。默认会存离线
+	Option      *MessageOption //发消息时特殊指定的行为选项
+}
+
 //AntiSpamCustom 自定义的反垃圾检测内容, JSON格式，不能超过5000字符
 type AntiSpamCustom struct {
 	Type int    `json:"type"` //1：文本，2：图片。

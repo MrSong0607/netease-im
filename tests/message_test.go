@@ -21,3 +21,10 @@ func TestSendBatchTextMessage(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+func TestSendBatchAttachMessage(t *testing.T) {
+	err := client.SendBatchAttachMsg("1", "{'msg':'test'}", []string{"2", "3"}, nil)
+	if err != nil {
+		t.Error(err)
+	}
+}
