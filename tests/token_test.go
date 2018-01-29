@@ -16,3 +16,11 @@ func TestToken(t *testing.T) {
 	}
 	t.Log(tk)
 }
+
+func TestRefreshToken(t *testing.T) {
+	tk, err := client.RefreshToken("1")
+	if err != nil {
+		t.Error(err)
+	}
+	t.Log(tk)
+}

@@ -11,6 +11,7 @@ import (
 const (
 	neteaseBaseURL    = "https://api.netease.im/nimserver"
 	createImUserPoint = neteaseBaseURL + "/user/create.action"
+	refreshTokenPoint = neteaseBaseURL + "/user/refreshToken.action"
 )
 
 //CreateImUser 创建网易云通信ID
@@ -65,6 +66,51 @@ func (c *ImClient) CreateImUser(u *ImUser) (*TokenInfo, error) {
 	client.SetFormData(param)
 
 	resp, err := client.Post(createImUserPoint)
+	if err != nil {
+		return nil, err
+	}
+
+	var jsonRes map[string]*json.RawMessage
+	err = jsoniter.Unmarshal(resp.Body(), &jsonRes)
+	if err != nil {
+		return nil, err
+	}
+
+	var code int
+	err = json.Unmarshal(*jsonRes["code"], &code)
+	if err != nil {
+		return nil, err
+	}
+
+	if code != 200 {
+		var msg string
+		json.Unmarshal(*jsonRes["desc"], &msg)
+		return nil, errors.New(msg)
+	}
+
+	tk := &TokenInfo{}
+	err = jsoniter.Unmarshal(*jsonRes["info"], tk)
+	if err != nil {
+		return nil, err
+	}
+
+	return tk, nil
+}
+
+//RefreshToken 更新并获取新token
+/**
+ * @param accid 网易云通信ID，最大长度32字符，必须保证一个APP内唯一
+ */
+func (c *ImClient) RefreshToken(accid string) (*TokenInfo, error) {
+	if len(accid) == 0 {
+		return nil, errors.New("必须指定网易云通信ID")
+	}
+
+	param := map[string]string{"accid": accid}
+	client := c.client.R()
+	client.SetFormData(param)
+
+	resp, err := client.Post(refreshTokenPoint)
 	if err != nil {
 		return nil, err
 	}
