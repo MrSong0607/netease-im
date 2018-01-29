@@ -23,3 +23,4 @@ err := client.SendTextMessage("1", "3", msg, nil)
     - [x] 获取IM通信token
     - [x] 发送文本消息
     - [x] 批量发送文本消息
+    - [x] 批量发送点对点自定义系统通知	
