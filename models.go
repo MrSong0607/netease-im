@@ -60,7 +60,7 @@ type MessageOption struct {
 	Route        *bool `json:"route,omitempty"`        //该消息是否需要抄送第三方；默认true (需要app开通消息抄送功能)
 	Badge        *bool `json:"badge,omitempty"`        //该消息是否需要计入到未读计数中，默认true
 	NeedPushNick *bool `json:"needPushNick,omitempty"` //推送文案是否需要带上昵称，不设置该参数时默认true
-	persistent   *bool `json:"persistent,omitempty"`   //是否需要存离线消息，不设置该参数时默认true
+	Persistent   *bool `json:"persistent,omitempty"`   //是否需要存离线消息，不设置该参数时默认true
 }
 
 //TextMessage 文本消息
