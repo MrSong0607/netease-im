@@ -32,9 +32,11 @@ func CreateImClient(appkey, appSecret, httpProxy string) *ImClient {
 	c.client.SetHeader("AppKey", c.AppKey)
 	c.client.SetHeader("Nonce", c.Nonce)
 
+	return c
+}
+
+func (c *ImClient) setCommonHead() {
 	timeStamp := strconv.FormatInt(time.Now().Unix(), 10)
 	c.client.SetHeader("CurTime", timeStamp)
 	c.client.SetHeader("CheckSum", ShaHashToHexStringFromString(c.AppSecret+c.Nonce+timeStamp))
-
-	return c
 }

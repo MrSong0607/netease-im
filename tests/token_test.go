@@ -6,10 +6,10 @@ import (
 	netease "github.com/MrSong0607/netease-im"
 )
 
-var client = netease.CreateImClient("36bb3190572f691d3b180fc099a1b4f1", "99c220190258", "http://127.0.0.1:8888")
+var client = netease.CreateImClient("36bb3190572f691d3b180fc099a1b4f1", "99c220190258", "")
 
 func TestToken(t *testing.T) {
-	user := &netease.ImUser{ID: "3", Name: "test3", Gender: 1}
+	user := &netease.ImUser{ID: "test1", Name: "test3", Gender: 1}
 	tk, err := client.CreateImUser(user)
 	if err != nil {
 		t.Error(err)
@@ -18,7 +18,7 @@ func TestToken(t *testing.T) {
 }
 
 func TestRefreshToken(t *testing.T) {
-	tk, err := client.RefreshToken("1")
+	tk, err := client.RefreshToken("7")
 	if err != nil {
 		t.Error(err)
 	}

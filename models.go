@@ -78,3 +78,8 @@ type ImageMessage struct {
 	Height    uint   `json:"h"`    //高
 	Size      uint   `json:"size"` //图片大小
 }
+
+//EventInfo 抄送信息
+type EventInfo struct {
+	EventType string `json:"eventType"`
+}
