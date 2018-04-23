@@ -38,9 +38,9 @@ const (
 )
 
 //GetEventNotification .
-func (c *ImClient) GetEventNotification(req *http.Request) error {
+func (c *ImClient) GetEventNotification(req *http.Request) ([]byte, error) {
 	if req == nil {
-		return errors.New("request 参数不能为空")
+		return nil, errors.New("request 参数不能为空")
 	}
 
 	checkSum := req.Header.Get("CheckSum")
@@ -48,15 +48,33 @@ func (c *ImClient) GetEventNotification(req *http.Request) error {
 	curTime := req.Header.Get("CurTime")
 	bd, err := ioutil.ReadAll(req.Body)
 	if err != nil {
-		return err
+		return nil, err
 	}
+	defer req.Body.Close()
 
 	if ShaHashToHexString(bd) != md5 {
-		return errors.New("消息抄送内容被劫持")
+		return bd, errors.New("消息抄送内容被劫持")
 	}
 
 	if checkSum != ShaHashToHexStringFromString(c.AppSecret+md5+curTime) {
-		return errors.New("CheckSum校验失败")
+		return bd, errors.New("CheckSum校验失败")
 	}
-	return nil
+	return bd, nil
+}
+
+//GetAudioCopyInfo .
+func (c *ImClient) GetAudioCopyInfo(req *http.Request) (*AudioCopyInfo, error) {
+	bd, err := c.GetEventNotification(req)
+	if err != nil {
+		return nil, err
+	}
+
+	aci := &AudioCopyInfo{}
+	if err := jsonTool.Unmarshal(bd, aci); err != nil {
+		return nil, err
+	}
+	if aci.EventType != EventTypeMediaDuration {
+		return nil, errors.New("抄送信息的类型不是音视频/白板时长类型")
+	}
+	return aci, err
 }
