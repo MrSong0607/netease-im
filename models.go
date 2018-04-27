@@ -119,7 +119,7 @@ type AudioCopyInfo struct {
 
 //AudioDownloadCopyInfo 音视频/白板文件下载信息抄送
 type AudioDownloadCopyInfo struct {
-	EventType string `json:"eventType"` //为5，表示是实时音视频/白板时长类型事件
+	EventType string `json:"eventType"` //值为6，表示是音视频/白板文件下载信息类型的消息
 	// 可转为JSONArray，其中的字段释义如下：
 	// caller：是否是此通通话的发起者，若是则为true，若不是则没有此字段，可转为Boolean值
 	// channelid：通道号，可转为Long值
@@ -132,4 +132,18 @@ type AudioDownloadCopyInfo struct {
 	// mix：是否为混合录制文件，true：混合录制文件；false：单人录制文件
 	// vid：点播文件id，注意白板录制文件(gz)无此字段
 	FileInfo string `json:"fileinfo"`
+}
+
+//FileDownloadInfo 单个文件下载信息
+type FileDownloadInfo struct {
+	Caller    bool   `json:"caller"`    //是否是此通通话的发起者，若是则为true，若不是则没有此字段，可转为Boolean值
+	ChannelID string `json:"channelid"` //通道号
+	Filename  string `json:"filename"`  //文件名，直接存储，混合录制文件filename带有"-mix"标记
+	Md5       string `json:"md5"`       //文件的md5值
+	Mix       bool   `json:"mix"`       //是否为混合录制文件，true：混合录制文件；false：单人录制文件
+	Size      string `json:"size"`      //size：文件大小，单位为字符，可转为Long值
+	Type      string `json:"type"`      //文件的类型（扩展名），包括：实时音频录制文件(aac)、白板录制文件(gz)、实时视频录制文件(mp4)、互动直播视频录制文件(flv)
+	Vid       string `json:"vid"`       //点播文件id，注意白板录制文件(gz)无此字段
+	URL       string `json:"url"`       //文件的下载地址，请不要解析该字段
+	User      string `json:"user"`      //用户帐号，若该文件为混合录制文件，则该字段为"0"
 }
