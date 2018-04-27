@@ -2,6 +2,7 @@ package netease
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 )
@@ -52,12 +53,12 @@ func (c *ImClient) GetEventNotification(req *http.Request) ([]byte, error) {
 	}
 	defer req.Body.Close()
 
-	if ShaHashToHexString(bd) != md5 {
-		return bd, errors.New("消息抄送内容被劫持")
+	if Md5HashToHexString(bd) != md5 {
+		return bd, fmt.Errorf("消息抄送内容被劫持,[md5]:%s,[body]:%s,[encodedBody]:%s", md5, string(bd), ShaHashToHexString(bd))
 	}
 
 	if checkSum != ShaHashToHexStringFromString(c.AppSecret+md5+curTime) {
-		return bd, errors.New("CheckSum校验失败")
+		return bd, fmt.Errorf("CheckSum校验失败,[request-header-checkSum]:%s,[Checksum]:%s,[encodedChecksum]:%s", checkSum, c.AppSecret+md5+curTime, ShaHashToHexStringFromString(c.AppSecret+md5+curTime))
 	}
 	return bd, nil
 }

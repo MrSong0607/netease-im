@@ -1,6 +1,7 @@
 package netease
 
 import (
+	"crypto/md5"
 	"crypto/sha1"
 	"encoding/hex"
 	"math/rand"
@@ -55,4 +56,11 @@ func ShaHashToHexString(bv []byte) string {
 //ShaHashToHexStringFromString .
 func ShaHashToHexStringFromString(src string) string {
 	return ShaHashToHexString([]byte(src))
+}
+
+//Md5HashToHexString .
+func Md5HashToHexString(bv []byte) string {
+	hasher := md5.New()
+	hasher.Write(bv)
+	return strings.ToLower(hex.EncodeToString(hasher.Sum(nil)))
 }
