@@ -79,6 +79,42 @@ type ImageMessage struct {
 	Size      uint   `json:"size"` //图片大小
 }
 
+//VoiceMessage 语音消息
+type VoiceMessage struct {
+	Duration  uint   `json:"dur"`  //语音持续时长ms
+	Md5       string `json:"md5"`  //语音文件md5
+	URL       string `json:"url"`  //生成的url
+	Extension string `json:"ext"`  //语音消息格式，只能是aac格式
+	Size      uint   `json:"size"` //语音文件大小
+}
+
+//VideoMessage 视频消息
+type VideoMessage struct {
+	Duration  uint   `json:"dur"`  //视频持续时长ms
+	Md5       string `json:"md5"`  //视频文件md5
+	URL       string `json:"url"`  //生成的url
+	Width     uint   `json:"w"`    //宽
+	Height    uint   `json:"h"`    //高
+	Extension string `json:"ext"`  //视频格式
+	Size      uint   `json:"size"` //视频文件大小
+}
+
+//LocationMessage 位置信息
+type LocationMessage struct {
+	Title     string  `json:"title"` //地理位置title
+	Longitude float64 `json:"lng"`   //经度
+	Latitude  float64 `json:"lat"`   //纬度
+}
+
+//FileMessage 文件消息
+type FileMessage struct {
+	Name      string `json:"name"` //文件名
+	Md5       string `json:"md5"`  //图片文件md5
+	URL       string `json:"url"`  //生成的url
+	Extension string `json:"ext"`  //语音消息格式，只能是aac格式
+	Size      uint   `json:"size"` //语音文件大小
+}
+
 //SenssionCopyInfo 会话类型信息抄送
 type SenssionCopyInfo struct {
 	EventType      string `json:"eventType"`      //值为1，表示是会话类型的消息

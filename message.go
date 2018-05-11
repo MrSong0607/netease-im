@@ -14,13 +14,24 @@ const (
 	sendBatchAttachMsgPoint = neteaseBaseURL + "/msg/sendBatchAttachMsg.action"
 )
 
+const (
+	//MsgTypeText 文本消息
+	MsgTypeText = iota
+	//MsgTypeImage 图片消息
+	MsgTypeImage
+	//MsgTypeVoice 语音消息
+	MsgTypeVoice
+	//MsgTypeVideo 视频消息
+	MsgTypeVideo
+)
+
 //SendTextMessage 发送文本消息,消息内容最长5000
 func (c *ImClient) SendTextMessage(fromID, toID string, msg *TextMessage, opt *ImSendMessageOption) error {
 	bd, err := jsonTool.MarshalToString(msg)
 	if err != nil {
 		return err
 	}
-	return c.SendMessage(fromID, toID, bd, 0, 0, opt)
+	return c.SendMessage(fromID, toID, bd, 0, MsgTypeText, opt)
 }
 
 //SendBatchTextMessage 批量发送文本消息
@@ -30,7 +41,37 @@ func (c *ImClient) SendBatchTextMessage(fromID string, toIDs []string, msg *Text
 		return err
 	}
 
-	return c.SendBatchMessage(fromID, bd, toIDs, 0, opt)
+	return c.SendBatchMessage(fromID, bd, toIDs, MsgTypeText, opt)
+}
+
+//SendBatchImageMessage 批量发送图片
+func (c *ImClient) SendBatchImageMessage(fromID string, toIDs []string, msg *ImageMessage, opt *ImSendMessageOption) error {
+	bd, err := jsonTool.MarshalToString(msg)
+	if err != nil {
+		return err
+	}
+
+	return c.SendBatchMessage(fromID, bd, toIDs, MsgTypeImage, opt)
+}
+
+//SendBatchVoiceMessage .
+func (c *ImClient) SendBatchVoiceMessage(fromID string, toIDs []string, msg *VoiceMessage, opt *ImSendMessageOption) error {
+	bd, err := jsonTool.MarshalToString(msg)
+	if err != nil {
+		return err
+	}
+
+	return c.SendBatchMessage(fromID, bd, toIDs, MsgTypeVoice, opt)
+}
+
+//SendBatchVideoMessage .
+func (c *ImClient) SendBatchVideoMessage(fromID string, toIDs []string, msg *VideoMessage, opt *ImSendMessageOption) error {
+	bd, err := jsonTool.MarshalToString(msg)
+	if err != nil {
+		return err
+	}
+
+	return c.SendBatchMessage(fromID, bd, toIDs, MsgTypeVideo, opt)
 }
 
 //SendMessage 发送普通消息
