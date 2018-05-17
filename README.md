@@ -17,11 +17,27 @@ tk, err := client.CreateImUser(user)
 msg := &netease.TextMessage{Message: "message test"}
 err := client.SendTextMessage("1", "3", msg, nil)
 ```
-
+##### 发送图片
+```
+msg := &netease.ImageMessage{URL: "https://golang.org/doc/gopher/frontpage.png", Md5: "可以填任意md5", Extension: "png"}
+err := client.SendBatchImageMessage("1", []string{"3"}, msg, nil)
+```
+##### 发送语音
+```
+msg := &netease.VoiceMessage{URL: "audio url", Md5: "可以填任意md5", Duration: 10, Extension: "aac"}
+err := client.SendBatchVoiceMessage("1", []string{"3"}, msg, nil)
+```
+##### 发送视频
+```
+msg := &netease.VideoMessage{URL: "video file url", Md5: "可以填任意md5", Extension: "mp4"}
+err := client.SendBatchVideoMessage("1", []string{"3"}, msg, nil)
+```
 ## 已实现功能
 * [ ] 通信服务
     - [x] 获取IM通信token
     - [x] 更新并获取新token
     - [x] 发送文本消息
+    - [x] 发送图片
+    - [x] 发送视频
     - [x] 批量发送文本消息
     - [x] 批量发送点对点自定义系统通知	
