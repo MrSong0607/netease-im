@@ -35,40 +35,40 @@ func (c *ImClient) SendTextMessage(fromID, toID string, msg *TextMessage, opt *I
 }
 
 //SendBatchTextMessage 批量发送文本消息
-func (c *ImClient) SendBatchTextMessage(fromID string, toIDs []string, msg *TextMessage, opt *ImSendMessageOption) error {
+func (c *ImClient) SendBatchTextMessage(fromID string, toIDs []string, msg *TextMessage, opt *ImSendMessageOption) (string, error) {
 	bd, err := jsonTool.MarshalToString(msg)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	return c.SendBatchMessage(fromID, bd, toIDs, MsgTypeText, opt)
 }
 
 //SendBatchImageMessage 批量发送图片
-func (c *ImClient) SendBatchImageMessage(fromID string, toIDs []string, msg *ImageMessage, opt *ImSendMessageOption) error {
+func (c *ImClient) SendBatchImageMessage(fromID string, toIDs []string, msg *ImageMessage, opt *ImSendMessageOption) (string, error) {
 	bd, err := jsonTool.MarshalToString(msg)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	return c.SendBatchMessage(fromID, bd, toIDs, MsgTypeImage, opt)
 }
 
 //SendBatchVoiceMessage .
-func (c *ImClient) SendBatchVoiceMessage(fromID string, toIDs []string, msg *VoiceMessage, opt *ImSendMessageOption) error {
+func (c *ImClient) SendBatchVoiceMessage(fromID string, toIDs []string, msg *VoiceMessage, opt *ImSendMessageOption) (string, error) {
 	bd, err := jsonTool.MarshalToString(msg)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	return c.SendBatchMessage(fromID, bd, toIDs, MsgTypeVoice, opt)
 }
 
 //SendBatchVideoMessage .
-func (c *ImClient) SendBatchVideoMessage(fromID string, toIDs []string, msg *VideoMessage, opt *ImSendMessageOption) error {
+func (c *ImClient) SendBatchVideoMessage(fromID string, toIDs []string, msg *VideoMessage, opt *ImSendMessageOption) (string, error) {
 	bd, err := jsonTool.MarshalToString(msg)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	return c.SendBatchMessage(fromID, bd, toIDs, MsgTypeVideo, opt)
@@ -156,13 +156,13 @@ func (c *ImClient) SendMessage(fromID, toID, body string, ope, msgType int, opt 
  * @param toIDs ["aaa","bbb"]（JSONArray对应的accid，如果解析出错，会报414错误），限500人
  * @param msgType 0 表示文本消息,1 表示图片，2 表示语音，3 表示视频，4 表示地理位置信息，6 表示文件，100 自定义消息类型
  */
-func (c *ImClient) SendBatchMessage(fromID, body string, toIDs []string, msgType int, opt *ImSendMessageOption) error {
+func (c *ImClient) SendBatchMessage(fromID, body string, toIDs []string, msgType int, opt *ImSendMessageOption) (string, error) {
 	c.setCommonHead()
 	param := map[string]string{"fromAccid": fromID}
 
 	to, err := jsonTool.MarshalToString(toIDs)
 	if err != nil {
-		return err
+		return "", err
 	}
 	param["toAccids"] = to
 	param["type"] = strconv.Itoa(msgType)
@@ -197,20 +197,20 @@ func (c *ImClient) SendBatchMessage(fromID, body string, toIDs []string, msgType
 	var jsonRes map[string]*json.RawMessage
 	err = jsoniter.Unmarshal(resp.Body(), &jsonRes)
 	if err != nil {
-		return err
+		return string(resp.Body()), err
 	}
 
 	var code int
 	err = json.Unmarshal(*jsonRes["code"], &code)
 	if err != nil {
-		return err
+		return string(resp.Body()), err
 	}
 
 	if code != 200 {
-		return errors.New(string(resp.Body()))
+		return string(resp.Body()), errors.New("云信接口返回错误")
 	}
 
-	return nil
+	return string(resp.Body()), nil
 }
 
 //SendBatchAttachMsg 批量发送点对点自定义系统通知

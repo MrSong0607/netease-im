@@ -16,7 +16,8 @@ func TestSendTextMessage(t *testing.T) {
 
 func TestSendBatchTextMessage(t *testing.T) {
 	msg := &netease.TextMessage{Message: "message test"}
-	err := client.SendBatchTextMessage("1", []string{"2", "3"}, msg, nil)
+	str, err := client.SendBatchTextMessage("1", []string{"2", "3"}, msg, nil)
+	t.Log(str)
 	if err != nil {
 		t.Error(err)
 	}
