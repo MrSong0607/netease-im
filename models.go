@@ -115,6 +115,17 @@ type FileMessage struct {
 	Size      uint   `json:"size"` //语音文件大小
 }
 
+//LoginEventCopyInfo 登录事件消息抄送
+type LoginEventCopyInfo struct {
+	EventType  string `json:"eventType"`  //值为2，表示是登录事件的消息
+	AcctID     string `json:"accid"`      //发生登录事件的用户帐号，字符串类型
+	IPAdrees   string `json:"clientIp"`   //登录时的ip地址
+	ClientType string `json:"clientType"` //客户端类型： AOS、IOS、PC、WINPHONE、WEB、REST，字符串类型
+	Code       string `json:"code"`       //登录事件的返回码，可转为Integer类型数据
+	SdkVersion string `json:"sdkVersion"` //当前sdk的版本信息，字符串类型
+	Time       string `json:"timestamp"`  //登录事件发生时的时间戳，可转为Long型数据
+}
+
 //SenssionCopyInfo 会话类型信息抄送
 type SenssionCopyInfo struct {
 	EventType      string `json:"eventType"`      //值为1，表示是会话类型的消息
