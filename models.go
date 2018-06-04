@@ -194,3 +194,15 @@ type FileDownloadInfo struct {
 	URL       string `json:"url"`       //文件的下载地址，请不要解析该字段
 	User      string `json:"user"`      //用户帐号，若该文件为混合录制文件，则该字段为"0"
 }
+
+//RoomInfo .
+type RoomInfo struct {
+	RoomID      int64  `json:"cid"`         //房间ID【int64】
+	RoomName    string `json:"cname"`       //房间名称
+	AcctID      string `json:"accid"`       //房间创建者ID
+	Total       int    `json:"total"`       //房间内活跃用户总数
+	Mode        int    `json:"mode"`        //房间模式【1：双人、2：多人】
+	Status      int    `json:"stats"`       //房间状态【1：初始状态，2：进行中，3：正常结束，4：异常结束】
+	CreateTime  int64  `json:"createtime"`  //房间创建时间【int64】
+	Destroytime int64  `json:"destroytime"` //房间结束时间【int64】
+}
