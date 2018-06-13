@@ -31,10 +31,10 @@ const (
 
 //GetRoomInfo .
 func (c *ImClient) GetRoomInfo(roomID string) (*RoomInfo, error) {
-	c.setCommonHead()
 	param := map[string]string{"id": roomID}
 
 	client := c.client.R()
+	c.setCommonHead(client)
 	client.SetPathParams(param)
 
 	resp, err := client.Get(roomInfoPoint)
@@ -67,10 +67,10 @@ func (c *ImClient) GetRoomInfo(roomID string) (*RoomInfo, error) {
 
 //DeleteRoom 删除某个房间
 func (c *ImClient) DeleteRoom(roomID string) error {
-	c.setCommonHead()
 	param := map[string]string{"id": roomID}
 
 	client := c.client.R()
+	c.setCommonHead(client)
 	client.SetPathParams(param)
 
 	if _, err := client.Delete(roomInfoPoint); err != nil {

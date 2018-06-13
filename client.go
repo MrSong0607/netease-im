@@ -39,10 +39,8 @@ func CreateImClient(appkey, appSecret, httpProxy string) *ImClient {
 	return c
 }
 
-func (c *ImClient) setCommonHead() {
+func (c *ImClient) setCommonHead(req *resty.Request) {
 	timeStamp := strconv.FormatInt(time.Now().Unix(), 10)
-	mutex.Lock()
-	c.client.SetHeader("CurTime", timeStamp)
-	c.client.SetHeader("CheckSum", ShaHashToHexStringFromString(c.AppSecret+c.Nonce+timeStamp))
-	mutex.Unlock()
+	req.SetHeader("CurTime", timeStamp)
+	req.SetHeader("CheckSum", ShaHashToHexStringFromString(c.AppSecret+c.Nonce+timeStamp))
 }

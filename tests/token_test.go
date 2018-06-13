@@ -1,6 +1,7 @@
 package tests
 
 import (
+	"encoding/json"
 	"testing"
 
 	netease "github.com/MrSong0607/netease-im"
@@ -22,5 +23,6 @@ func TestRefreshToken(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	t.Log(tk)
+	b, err := json.Marshal(tk)
+	t.Log(string(b), err)
 }

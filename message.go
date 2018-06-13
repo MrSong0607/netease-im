@@ -83,7 +83,6 @@ func (c *ImClient) SendBatchVideoMessage(fromID string, toIDs []string, msg *Vid
  * @param body 最大长度5000字符，为一个JSON串
  */
 func (c *ImClient) SendMessage(fromID, toID, body string, ope, msgType int, opt *ImSendMessageOption) error {
-	c.setCommonHead()
 	param := map[string]string{"from": fromID}
 
 	param["ope"] = strconv.Itoa(ope)
@@ -127,6 +126,7 @@ func (c *ImClient) SendMessage(fromID, toID, body string, ope, msgType int, opt 
 		}
 	}
 	client := c.client.R()
+	c.setCommonHead(client)
 	client.SetFormData(param)
 
 	resp, err := client.Post(sendMsgPoint)
@@ -157,7 +157,6 @@ func (c *ImClient) SendMessage(fromID, toID, body string, ope, msgType int, opt 
  * @param msgType 0 表示文本消息,1 表示图片，2 表示语音，3 表示视频，4 表示地理位置信息，6 表示文件，100 自定义消息类型
  */
 func (c *ImClient) SendBatchMessage(fromID, body string, toIDs []string, msgType int, opt *ImSendMessageOption) (string, error) {
-	c.setCommonHead()
 	param := map[string]string{"fromAccid": fromID}
 
 	to, err := jsonTool.MarshalToString(toIDs)
@@ -190,6 +189,7 @@ func (c *ImClient) SendBatchMessage(fromID, body string, toIDs []string, msgType
 		}
 	}
 	client := c.client.R()
+	c.setCommonHead(client)
 	client.SetFormData(param)
 
 	resp, err := client.Post(sendBatchMsgPoint)
@@ -220,7 +220,6 @@ func (c *ImClient) SendBatchMessage(fromID, body string, toIDs []string, msgType
  * @param attach 自定义通知内容，第三方组装的字符串，建议是JSON串，最大长度4096字符
  */
 func (c *ImClient) SendBatchAttachMsg(fromID, attach string, toIDs []string, opt *ImSendAttachMessageOption) error {
-	c.setCommonHead()
 	param := map[string]string{"fromAccid": fromID}
 
 	to, err := jsonTool.MarshalToString(toIDs)
@@ -253,6 +252,7 @@ func (c *ImClient) SendBatchAttachMsg(fromID, attach string, toIDs []string, opt
 	}
 
 	client := c.client.R()
+	c.setCommonHead(client)
 	client.SetFormData(param)
 
 	resp, err := client.Post(sendBatchAttachMsgPoint)

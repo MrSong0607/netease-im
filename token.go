@@ -29,7 +29,6 @@ const (
  * @param ex 用户名片扩展字段，最大长度1024字符，用户可自行扩展，建议封装成JSON字符串
  */
 func (c *ImClient) CreateImUser(u *ImUser) (*TokenInfo, error) {
-	c.setCommonHead()
 	param := map[string]string{"accid": u.ID}
 
 	if len(u.Name) > 0 {
@@ -64,6 +63,7 @@ func (c *ImClient) CreateImUser(u *ImUser) (*TokenInfo, error) {
 	}
 
 	client := c.client.R()
+	c.setCommonHead(client)
 	client.SetFormData(param)
 
 	resp, err := client.Post(createImUserPoint)
@@ -103,13 +103,13 @@ func (c *ImClient) CreateImUser(u *ImUser) (*TokenInfo, error) {
  * @param accid 网易云通信ID，最大长度32字符，必须保证一个APP内唯一
  */
 func (c *ImClient) RefreshToken(accid string) (*TokenInfo, error) {
-	c.setCommonHead()
 	if len(accid) == 0 {
 		return nil, errors.New("必须指定网易云通信ID")
 	}
 
 	param := map[string]string{"accid": accid}
 	client := c.client.R()
+	c.setCommonHead(client)
 	client.SetFormData(param)
 
 	resp, err := client.Post(refreshTokenPoint)
