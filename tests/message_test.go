@@ -1,6 +1,7 @@
 package tests
 
 import (
+	"os"
 	"testing"
 
 	netease "github.com/MrSong0607/netease-im"
@@ -28,4 +29,9 @@ func TestSendBatchAttachMessage(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+}
+
+func TestBroadcastMsg(t *testing.T) {
+	os.Setenv("GOCACHE", "off")
+	t.Log(client.BroadcastMsg("今天天气很好，我在这里等你哦", "", nil, []string{"web"}))
 }
