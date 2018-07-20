@@ -71,7 +71,7 @@ func (c *ImClient) BroadcastMsg(body, fromID string, isOffline *bool, targetOs [
 		return nil, errors.New(string(resp.Body()))
 	}
 
-	err = jsoniter.Unmarshal(*jsonRes["msgs"], msgs)
+	err = jsoniter.Unmarshal(*jsonRes["msg"], msgs)
 	if err != nil {
 		return nil, err
 	}

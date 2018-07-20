@@ -7,7 +7,7 @@ import (
 	netease "github.com/MrSong0607/netease-im"
 )
 
-var client = netease.CreateImClient("36bb3190572f691d3b180fc099a1b4f1", "99c220190258", "")
+var client = netease.CreateImClient("", "", "http://127.0.0.1:8889")
 
 func TestToken(t *testing.T) {
 	user := &netease.ImUser{ID: "test1", Name: "test3", Gender: 1}
