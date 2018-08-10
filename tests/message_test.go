@@ -8,8 +8,8 @@ import (
 )
 
 func TestSendTextMessage(t *testing.T) {
-	msg := &netease.TextMessage{Message: "message test"}
-	err := client.SendTextMessage("1", "3", msg, nil)
+	msg := &netease.TextMessage{Message: "message test 1"}
+	err := client.SendTextMessage("test_3", "test_1", msg, nil)
 	if err != nil {
 		t.Error(err)
 	}
