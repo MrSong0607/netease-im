@@ -3,7 +3,6 @@ package netease
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"strconv"
 
 	jsoniter "github.com/json-iterator/go"
@@ -54,7 +53,6 @@ func (c *ImClient) BroadcastMsg(body, fromID string, isOffline *bool, targetOs [
 
 	resp, err := client.Post(broadcastMessagePoint)
 
-	fmt.Println(string(resp.Body()))
 	var jsonRes map[string]*json.RawMessage
 	err = jsoniter.Unmarshal(resp.Body(), &jsonRes)
 	if err != nil {
@@ -71,6 +69,7 @@ func (c *ImClient) BroadcastMsg(body, fromID string, isOffline *bool, targetOs [
 		return nil, errors.New(string(resp.Body()))
 	}
 
+	msgs = &BroadcastResult{}
 	err = jsoniter.Unmarshal(*jsonRes["msg"], msgs)
 	if err != nil {
 		return nil, err
