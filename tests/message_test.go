@@ -9,7 +9,7 @@ import (
 
 func TestSendTextMessage(t *testing.T) {
 	msg := &netease.TextMessage{Message: "message test 1"}
-	err := client.SendTextMessage("test_3", "test_1", msg, nil)
+	err := client.SendTextMessage("1", "169143", msg, nil)
 	if err != nil {
 		t.Error(err)
 	}
@@ -17,7 +17,7 @@ func TestSendTextMessage(t *testing.T) {
 
 func TestSendBatchTextMessage(t *testing.T) {
 	msg := &netease.TextMessage{Message: "message test"}
-	str, err := client.SendBatchTextMessage("1", []string{"2", "3"}, msg, nil)
+	str, err := client.SendBatchTextMessage("1", []string{"169143"}, msg, nil)
 	t.Log(str)
 	if err != nil {
 		t.Error(err)
@@ -34,4 +34,8 @@ func TestSendBatchAttachMessage(t *testing.T) {
 func TestBroadcastMsg(t *testing.T) {
 	os.Setenv("GOCACHE", "off")
 	t.Log(client.BroadcastMsg("好久不见了呢，我在这里等你哦", "", nil, nil))
+}
+
+func TestRecallMsg(t *testing.T) {
+	t.Log(client.RecallMessage("456", "time", "from", "to", 7))
 }

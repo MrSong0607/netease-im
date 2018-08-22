@@ -3,6 +3,7 @@ package netease
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"strconv"
 
 	jsoniter "github.com/json-iterator/go"
@@ -12,6 +13,7 @@ const (
 	sendMsgPoint            = neteaseBaseURL + "/msg/sendMsg.action"
 	sendBatchMsgPoint       = neteaseBaseURL + "/msg/sendBatchMsg.action"
 	sendBatchAttachMsgPoint = neteaseBaseURL + "/msg/sendBatchAttachMsg.action"
+	messageRecallPoint      = neteaseBaseURL + "/msg/recall.action"
 )
 
 const (
@@ -262,6 +264,44 @@ func (c *ImClient) SendBatchAttachMsg(fromID, attach string, toIDs []string, opt
 	if err != nil {
 		return err
 	}
+
+	var code int
+	err = json.Unmarshal(*jsonRes["code"], &code)
+	if err != nil {
+		return err
+	}
+
+	if code != 200 {
+		return errors.New(string(resp.Body()))
+	}
+
+	return nil
+}
+
+//RecallMessage 消息撤回
+/**
+ * @param deleteMsgid 要撤回消息的msgid
+ * @param timetag 要撤回消息的创建时间
+ * @param fromID 发消息的accid
+ * @param toID 如果点对点消息，为接收消息的accid,如果群消息，为对应群的tid
+ * @param msgtype 7:表示点对点消息撤回，8:表示群消息撤回，其它为参数错误
+ */
+func (c *ImClient) RecallMessage(deleteMsgid, timetag, fromID, toID string, msgtype int) error {
+	param := map[string]string{"from": fromID, "to": toID, "type": strconv.Itoa(msgtype), "timetag": timetag, "deleteMsgid": deleteMsgid}
+
+	client := c.client.R()
+	c.setCommonHead(client)
+	client.SetFormData(param)
+
+	resp, err := client.Post(sendBatchAttachMsgPoint)
+	if err != nil {
+		return err
+	}
+
+	var jsonRes map[string]*json.RawMessage
+	jsonTool.Unmarshal(resp.Body(), &jsonRes)
+
+	fmt.Println(string(resp.Body()))
 
 	var code int
 	err = json.Unmarshal(*jsonRes["code"], &code)
