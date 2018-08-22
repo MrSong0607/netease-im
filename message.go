@@ -293,7 +293,7 @@ func (c *ImClient) RecallMessage(deleteMsgid, timetag, fromID, toID string, msgt
 	c.setCommonHead(client)
 	client.SetFormData(param)
 
-	resp, err := client.Post(sendBatchAttachMsgPoint)
+	resp, err := client.Post(messageRecallPoint)
 	if err != nil {
 		return err
 	}
