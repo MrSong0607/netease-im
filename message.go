@@ -3,7 +3,6 @@ package netease
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"strconv"
 
 	jsoniter "github.com/json-iterator/go"
@@ -287,7 +286,7 @@ func (c *ImClient) SendBatchAttachMsg(fromID, attach string, toIDs []string, opt
  * @param msgtype 7:表示点对点消息撤回，8:表示群消息撤回，其它为参数错误
  */
 func (c *ImClient) RecallMessage(deleteMsgid, timetag, fromID, toID string, msgtype int) error {
-	param := map[string]string{"from": fromID, "to": toID, "type": strconv.Itoa(msgtype), "timetag": timetag, "deleteMsgid": deleteMsgid}
+	param := map[string]string{"from": fromID, "to": toID, "type": strconv.Itoa(msgtype), "timetag": timetag, "deleteMsgid": deleteMsgid, "msg": "."}
 
 	client := c.client.R()
 	c.setCommonHead(client)
@@ -300,8 +299,6 @@ func (c *ImClient) RecallMessage(deleteMsgid, timetag, fromID, toID string, msgt
 
 	var jsonRes map[string]*json.RawMessage
 	jsonTool.Unmarshal(resp.Body(), &jsonRes)
-
-	fmt.Println(string(resp.Body()))
 
 	var code int
 	err = json.Unmarshal(*jsonRes["code"], &code)
