@@ -42,3 +42,5 @@ err := client.SendBatchVideoMessage("1", []string{"3"}, msg, nil)
     - [x] 批量发送文本消息
     - [x] 批量发送点对点自定义系统通知	
     - [x] 查询单聊历史消息
+    - [x] 聊天室
+    - [x] 消息抄送

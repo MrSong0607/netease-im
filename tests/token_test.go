@@ -7,7 +7,7 @@ import (
 	netease "github.com/MrSong0607/netease-im"
 )
 
-var client = netease.CreateImClient("", "", "http://127.0.0.1:8889")
+var client = netease.CreateImClient("", "", "")
 
 func TestToken(t *testing.T) {
 	user := &netease.ImUser{ID: "test1", Name: "test3", Gender: 1}
@@ -25,4 +25,8 @@ func TestRefreshToken(t *testing.T) {
 	}
 	b, err := json.Marshal(tk)
 	t.Log(string(b), err)
+}
+
+func Benchmark_SyncMap(b *testing.B) {
+	netease.CreateImClient("", "", "")
 }
