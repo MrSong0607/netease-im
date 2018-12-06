@@ -1,4 +1,4 @@
-### 使用方法
+## 使用方法
 #### 安装:
 `go get -u github.com/MrSong0607/netease-im`
 
@@ -44,3 +44,6 @@ err := client.SendBatchVideoMessage("1", []string{"3"}, msg, nil)
     - [x] 查询单聊历史消息
     - [x] 聊天室
     - [x] 消息抄送
+
+##  License
+netease-im 使用[GPL](https://www.gnu.org/licenses/gpl-3.0.en.html)开源协议
