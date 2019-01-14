@@ -46,4 +46,4 @@ err := client.SendBatchVideoMessage("1", []string{"3"}, msg, nil)
     - [x] 消息抄送
 
 ##  License
-netease-im 使用[GPL](https://www.gnu.org/licenses/gpl-3.0.en.html)开源协议
+netease-im 使用[MIT](https://opensource.org/licenses/MIT)开源协议
