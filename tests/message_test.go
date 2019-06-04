@@ -9,7 +9,7 @@ import (
 
 func TestSendTextMessage(t *testing.T) {
 	msg := &netease.TextMessage{Message: "message test 1"}
-	err := client.SendTextMessage("1", "169143", msg, nil)
+	err := client.SendTextMessage("test1", "test2", msg, nil)
 	if err != nil {
 		t.Error(err)
 	}
@@ -37,5 +37,8 @@ func TestBroadcastMsg(t *testing.T) {
 }
 
 func TestRecallMsg(t *testing.T) {
-	t.Log(client.RecallMessage("456", "time", "from", "to", 7))
+	err := client.RecallMessage("280384449779", "1559633306342", "test1", "test2", 7)
+	if err != nil {
+		t.Error(err)
+	}
 }

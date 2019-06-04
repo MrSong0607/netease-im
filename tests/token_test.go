@@ -2,6 +2,7 @@ package tests
 
 import (
 	"encoding/json"
+	"os"
 	"testing"
 
 	netease "github.com/MrSong0607/netease-im"
@@ -9,8 +10,12 @@ import (
 
 var client = netease.CreateImClient("", "", "")
 
+func init() {
+	os.Setenv("GOCACHE", "off")
+}
+
 func TestToken(t *testing.T) {
-	user := &netease.ImUser{ID: "test1", Name: "test3", Gender: 1}
+	user := &netease.ImUser{ID: "test2", Name: "test3", Gender: 1}
 	tk, err := client.CreateImUser(user)
 	if err != nil {
 		t.Error(err)
